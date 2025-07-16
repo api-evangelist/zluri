@@ -5,7 +5,8 @@ apis:
   - aid: zluri:zluri
     name: Zluri
     tags:
-      - API
+      - SaaS Management
+      - Access Management
     humanURL: https://www.zluri.com/
     properties:
       - url: https://www.zluri.com/
@@ -13,7 +14,8 @@ apis:
     description: 'Discover identities '
 name: Zluri
 tags:
-  - API
+  - SaaS Management
+  - Access Management
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
