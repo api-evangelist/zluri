@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/zluri/refs/heads/main/json-schema/fact-data-upload.json",
+  "title": "Zluri Fact Data Upload",
+  "description": "Payload for uploading fact entity data within an active sync session. Fact data represents historical events appended to the timeline for analytics and compliance.",
+  "type": "object",
+  "required": ["entity", "page", "data"],
+  "properties": {
+    "entity": {
+      "type": "string",
+      "description": "The type of fact entity being uploaded.",
+      "enum": ["activities", "transactions"]
+    },
+    "page": {
+      "type": "integer",
+      "description": "Page number for this batch of data.",
+      "minimum": 1
+    },
+    "data": {
+      "type": "array",
+      "description": "Array of fact records. Maximum 1000 records per page.",
+      "maxItems": 1000,
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

@@ -18,6 +18,20 @@ apis:
         type: Portal
       - url: openapi/zluri-api-openapi.yml
         type: OpenAPI
+      - url: json-schema/instance.json
+        type: JSONSchema
+      - url: json-schema/sync.json
+        type: JSONSchema
+      - url: json-schema/snapshot-data-upload.json
+        type: JSONSchema
+      - url: json-schema/fact-data-upload.json
+        type: JSONSchema
+      - url: json-schema/webhook.json
+        type: JSONSchema
+      - url: json-schema/error.json
+        type: JSONSchema
+      - url: json-ld/zluri-context.jsonld
+        type: JSONLD
     description: >-
       Zluri is a SaaS management and operations platform that helps
       organizations discover, govern, and optimize all their cloud applications.

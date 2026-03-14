@@ -1,0 +1,83 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "zluri": "https://api-ext.zluri.com/v2/",
+    "Instance": {
+      "@id": "zluri:Instance",
+      "@context": {
+        "id": "@id",
+        "name": "schema:name",
+        "status": "schema:status",
+        "notification_emails": "schema:email",
+        "created_at": "schema:dateCreated",
+        "updated_at": "schema:dateModified"
+      }
+    },
+    "Sync": {
+      "@id": "zluri:Sync",
+      "@context": {
+        "id": "@id",
+        "instance_id": "schema:isPartOf",
+        "status": "schema:status",
+        "created_at": "schema:dateCreated",
+        "finished_at": "schema:endDate"
+      }
+    },
+    "Webhook": {
+      "@id": "zluri:Webhook",
+      "@context": {
+        "id": "@id",
+        "url": "schema:url",
+        "events": "schema:about",
+        "status": "schema:status",
+        "created_at": "schema:dateCreated",
+        "updated_at": "schema:dateModified"
+      }
+    },
+    "SnapshotDataUpload": {
+      "@id": "zluri:SnapshotDataUpload",
+      "@context": {
+        "entity": "schema:additionalType",
+        "page": "schema:position",
+        "data": "schema:dataset"
+      }
+    },
+    "FactDataUpload": {
+      "@id": "zluri:FactDataUpload",
+      "@context": {
+        "entity": "schema:additionalType",
+        "page": "schema:position",
+        "data": "schema:dataset"
+      }
+    },
+    "User": {
+      "@id": "schema:Person",
+      "@context": {
+        "email": "schema:email",
+        "name": "schema:name",
+        "status": "schema:status"
+      }
+    },
+    "Application": {
+      "@id": "schema:SoftwareApplication",
+      "@context": {
+        "name": "schema:name",
+        "status": "schema:status"
+      }
+    },
+    "Contract": {
+      "@id": "schema:Service",
+      "@context": {
+        "name": "schema:name",
+        "status": "schema:status"
+      }
+    },
+    "Transaction": {
+      "@id": "schema:PayAction",
+      "@context": {
+        "amount": "schema:price",
+        "date": "schema:startTime"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/zluri/refs/heads/main/json-schema/instance.json",
+  "title": "Zluri Integration Instance",
+  "description": "An integration instance configured in Zluri for syncing data from external applications.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the instance."
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the integration instance."
+    },
+    "status": {
+      "type": "string",
+      "description": "Current status of the instance.",
+      "enum": ["active", "inactive"]
+    },
+    "notification_emails": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "email"
+      },
+      "description": "Email addresses to receive sync notifications."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the instance was created."
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the instance was last updated."
+    }
+  },
+  "required": ["id", "name", "status"]
+}
