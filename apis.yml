@@ -12,6 +12,12 @@ apis:
     properties:
       - url: https://www.zluri.com/
         type: Documentation
+      - url: https://api-docs.zluri.dev/
+        type: Documentation
+      - url: https://developers.zluri.com/
+        type: Portal
+      - url: openapi/zluri-api-openapi.yml
+        type: OpenAPI
     description: >-
       Zluri is a SaaS management and operations platform that helps
       organizations discover, govern, and optimize all their cloud applications.
@@ -109,7 +115,7 @@ common:
     name: Use Cases
     type: UseCases
 created: '2025-07-15'
-modified: '2026-01-03'
+modified: '2026-03-14'
 position: Consumer
 description: >-
   Zluri is a software solution that helps businesses streamline their SaaS

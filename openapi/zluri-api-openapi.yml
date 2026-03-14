@@ -1,0 +1,702 @@
+openapi: 3.1.0
+info:
+  title: Zluri API
+  description: >-
+    The Zluri API provides external endpoints for integrating with the Zluri SaaS
+    management platform. It enables organizations to push data from custom and
+    on-premise applications to Zluri when no native connector is available. The API
+    supports syncing users, applications, contracts, transactions, groups, roles,
+    and activities. It follows a sync-based workflow where you create a sync
+    session, upload data in paginated batches, and finish the sync to make data
+    visible in Zluri. The API also supports webhook management for real-time
+    notifications and instance configuration management.
+  version: 2.0.0
+  contact:
+    name: Zluri Support
+    url: https://support.zluri.com
+  license:
+    name: Proprietary
+    url: https://www.zluri.com/policy/terms-and-conditions
+  termsOfService: https://www.zluri.com/policy/terms-and-conditions
+externalDocs:
+  description: Zluri API Documentation
+  url: https://api-docs.zluri.dev/
+servers:
+  - url: https://api-ext.zluri.com/v2
+    description: Zluri External API
+security:
+  - bearerAuth: []
+tags:
+  - name: Instances
+    description: Manage integration instances for syncing data with Zluri.
+  - name: Syncs
+    description: >-
+      Create and manage sync sessions for uploading data to Zluri. A sync must be
+      created before uploading data, and finished after all data is uploaded.
+  - name: Data Upload
+    description: >-
+      Upload snapshot and fact data within a sync session. Snapshot data represents
+      current state, while fact data represents historical events. Data must be
+      uploaded in paginated batches of up to 1000 records per page.
+  - name: Webhooks
+    description: Manage webhooks for receiving real-time notifications from Zluri.
+paths:
+  /integrations-sync/instances:
+    get:
+      operationId: listInstances
+      summary: List instances
+      description: Retrieve a list of all integration instances configured in your Zluri account.
+      tags:
+        - Instances
+      responses:
+        '200':
+          description: A list of integration instances.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Instance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}:
+    get:
+      operationId: getInstance
+      summary: Get instance
+      description: Retrieve details of a specific integration instance.
+      tags:
+        - Instances
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '200':
+          description: The integration instance details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Instance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    put:
+      operationId: updateInstance
+      summary: Update instance
+      description: >-
+        Update an existing integration instance configuration with new data in
+        the request body. You can update notification emails and other instance
+        settings.
+      tags:
+        - Instances
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceUpdate'
+      responses:
+        '200':
+          description: The updated integration instance.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Instance'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs:
+    post:
+      operationId: createSync
+      summary: Create sync
+      description: >-
+        Create a new sync session for the specified instance. Only one sync can
+        be active per instance at a time. Unfinished syncs block new syncs for
+        the same instance. Data uploaded during a sync will not appear in Zluri
+        until the sync is finished.
+      tags:
+        - Syncs
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '201':
+          description: The newly created sync session.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: A sync is already in progress for this instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}:
+    get:
+      operationId: getSyncStatus
+      summary: Get sync status
+      description: >-
+        Retrieve the current status of a sync session. Use this to check if a
+        sync is running, failed, or finished.
+      tags:
+        - Syncs
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+        - $ref: '#/components/parameters/SyncId'
+      responses:
+        '200':
+          description: The sync session details and status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/finish:
+    post:
+      operationId: finishSync
+      summary: Finish sync
+      description: >-
+        Mark a sync session as finished. Data will not appear in Zluri until
+        the sync is finished. Always finish your sync after uploading all data.
+        Once finished, a new sync can be created for the same instance.
+      tags:
+        - Syncs
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+        - $ref: '#/components/parameters/SyncId'
+      responses:
+        '200':
+          description: The sync has been successfully finished.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/snapshots:
+    post:
+      operationId: uploadSnapshotData
+      summary: Upload snapshot data
+      description: >-
+        Upload snapshot entity data within an active sync session. Snapshot data
+        represents the current state of entities. Zluri compares new snapshots
+        with the previous state to identify changes such as new users,
+        deactivated users, and role changes. Data must be sent in paginated
+        batches of up to 1000 records per page. Re-uploading a page with the
+        same page number during an active sync will overwrite the previous data
+        for that page. Supported entities include users, applications, contracts,
+        and transactions. Follow the dependency order: users, then groups, then
+        group_users, then activities.
+      tags:
+        - Data Upload
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+        - $ref: '#/components/parameters/SyncId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapshotDataUpload'
+      responses:
+        '200':
+          description: The snapshot data was successfully uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data uploaded successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Schema validation failed. Check that the entity fields match snapshot requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/facts:
+    post:
+      operationId: uploadFactData
+      summary: Upload fact data
+      description: >-
+        Upload fact entity data within an active sync session. Fact data
+        represents historical events that Zluri appends to the timeline for
+        analytics and compliance tracking. Data must be sent in paginated batches
+        of up to 1000 records per page. Fact and snapshot entities have different
+        required fields and structures; using the wrong endpoint will fail schema
+        validation.
+      tags:
+        - Data Upload
+      parameters:
+        - $ref: '#/components/parameters/InstanceId'
+        - $ref: '#/components/parameters/SyncId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FactDataUpload'
+      responses:
+        '200':
+          description: The fact data was successfully uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data uploaded successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Schema validation failed. Check that the entity fields match fact requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /webhooks:
+    get:
+      operationId: listWebhooks
+      summary: List webhooks
+      description: Retrieve all configured webhooks for your Zluri account.
+      tags:
+        - Webhooks
+      responses:
+        '200':
+          description: A list of webhooks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    post:
+      operationId: createWebhook
+      summary: Create webhook
+      description: >-
+        Create a new webhook to receive real-time notifications for events such
+        as user status updates from IDP and HRMS tools.
+      tags:
+        - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreate'
+      responses:
+        '201':
+          description: The newly created webhook.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /webhooks/{webhook_id}:
+    get:
+      operationId: getWebhook
+      summary: Get webhook
+      description: Retrieve details of a specific webhook.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+      responses:
+        '200':
+          description: The webhook details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    put:
+      operationId: updateWebhook
+      summary: Update webhook
+      description: Update an existing webhook configuration.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdate'
+      responses:
+        '200':
+          description: The updated webhook.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    delete:
+      operationId: deleteWebhook
+      summary: Delete webhook
+      description: Delete a webhook.
+      tags:
+        - Webhooks
+      parameters:
+        - $ref: '#/components/parameters/WebhookId'
+      responses:
+        '204':
+          description: The webhook was successfully deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Bearer token authentication. Obtain your API token from the Zluri
+        admin dashboard.
+  parameters:
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
+    WebhookId:
+      name: webhook_id
+      in: path
+      required: true
+      description: The unique identifier of the webhook.
+      schema:
+        type: string
+  schemas:
+    Instance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the instance.
+        name:
+          type: string
+          description: Name of the integration instance.
+        status:
+          type: string
+          description: Current status of the instance.
+          enum:
+            - active
+            - inactive
+        notification_emails:
+          type: array
+          items:
+            type: string
+            format: email
+          description: Email addresses to receive sync notifications.
+        created_at:
+          type: string
+          format: date-time
+          description: When the instance was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the instance was last updated.
+    InstanceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Updated name for the instance.
+        notification_emails:
+          type: array
+          items:
+            type: string
+            format: email
+          description: Updated email addresses for sync notifications.
+    Sync:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the sync session.
+        instance_id:
+          type: string
+          description: The instance this sync belongs to.
+        status:
+          type: string
+          description: Current status of the sync.
+          enum:
+            - running
+            - finished
+            - failed
+        created_at:
+          type: string
+          format: date-time
+          description: When the sync was created.
+        finished_at:
+          type: string
+          format: date-time
+          description: When the sync was finished.
+    SnapshotDataUpload:
+      type: object
+      required:
+        - entity
+        - page
+        - data
+      properties:
+        entity:
+          type: string
+          description: >-
+            The type of entity being uploaded. Supported snapshot entities include
+            users, applications, contracts, transactions, groups, group_users,
+            roles, and activities. Note that groups, roles, and activities have
+            a dependency on users being synced first.
+          enum:
+            - users
+            - applications
+            - contracts
+            - transactions
+            - groups
+            - group_users
+            - roles
+            - activities
+        page:
+          type: integer
+          description: >-
+            Page number for this batch of data. Re-uploading a page with the
+            same number will overwrite the previous data for that page.
+          minimum: 1
+        data:
+          type: array
+          description: >-
+            Array of entity records. Maximum 1000 records per page. If you have
+            more data, split it into multiple pages.
+          maxItems: 1000
+          items:
+            type: object
+    FactDataUpload:
+      type: object
+      required:
+        - entity
+        - page
+        - data
+      properties:
+        entity:
+          type: string
+          description: >-
+            The type of fact entity being uploaded. Fact data represents events
+            appended to the historical timeline for analytics and compliance.
+          enum:
+            - activities
+            - transactions
+        page:
+          type: integer
+          description: Page number for this batch of data.
+          minimum: 1
+        data:
+          type: array
+          description: >-
+            Array of fact records. Maximum 1000 records per page.
+          maxItems: 1000
+          items:
+            type: object
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the webhook.
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types this webhook subscribes to.
+        status:
+          type: string
+          description: Current status of the webhook.
+          enum:
+            - active
+            - inactive
+        created_at:
+          type: string
+          format: date-time
+          description: When the webhook was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the webhook was last updated.
+    WebhookCreate:
+      type: object
+      required:
+        - url
+        - events
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types to subscribe to.
+    WebhookUpdate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Updated URL for webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: Updated list of event types to subscribe to.
+        status:
+          type: string
+          description: Updated status of the webhook.
+          enum:
+            - active
+            - inactive
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+  responses:
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
