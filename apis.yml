@@ -5,9 +5,9 @@ apis:
   - aid: zluri:zluri
     name: Zluri
     tags:
-      - SaaS Management
       - Access Management
       - FinOps
+      - SaaS Management
     humanURL: https://www.zluri.com/
     properties:
       - url: https://www.zluri.com/
@@ -41,8 +41,8 @@ apis:
       licenses, and manage renewals and vendor relationships.
 name: Zluri
 tags:
-  - SaaS Management
   - Access Management
+  - SaaS Management
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party

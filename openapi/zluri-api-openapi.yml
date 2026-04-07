@@ -27,17 +27,17 @@ servers:
 security:
   - bearerAuth: []
 tags:
+  - name: Data Upload
+    description: >-
+      Upload snapshot and fact data within a sync session. Snapshot data represents
+      current state, while fact data represents historical events. Data must be
+      uploaded in paginated batches of up to 1000 records per page.
   - name: Instances
     description: Manage integration instances for syncing data with Zluri.
   - name: Syncs
     description: >-
       Create and manage sync sessions for uploading data to Zluri. A sync must be
       created before uploading data, and finished after all data is uploaded.
-  - name: Data Upload
-    description: >-
-      Upload snapshot and fact data within a sync session. Snapshot data represents
-      current state, while fact data represents historical events. Data must be
-      uploaded in paginated batches of up to 1000 records per page.
   - name: Webhooks
     description: Manage webhooks for receiving real-time notifications from Zluri.
 paths:
