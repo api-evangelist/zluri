@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-structure.org/schema/v0",
+  "name": "SnapshotDataUpload",
+  "type": "object",
+  "description": "Payload for uploading snapshot data in a Zluri sync.",
+  "properties": {
+    "entity": {"type": "string"},
+    "page": {"type": "integer", "minimum": 1},
+    "data": {"type": "array", "maxItems": 1000, "items": {"type": "object"}}
+  },
+  "required": ["entity", "page", "data"]
+}

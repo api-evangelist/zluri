@@ -1,0 +1,42 @@
+apiVersion: naftiko/v1
+kind: WorkflowCapability
+metadata:
+  name: saas-data-sync
+  provider: zluri
+info:
+  title: SaaS Data Sync
+  description: >-
+    A workflow capability for an IT Operations engineer pushing user,
+    application, contract, and activity data from custom or on-premise systems
+    into Zluri. Combines instance setup, sync session management, and paginated
+    snapshot/fact data uploads to keep Zluri's system of record in sync.
+  persona: IT Operations Engineer
+combines:
+  - api: zluri-api
+    capability: capabilities/shared/zluri-api.yaml
+mcp:
+  tools:
+    - name: list-instances
+      description: List all configured integration instances.
+      operationId: listInstances
+    - name: get-instance
+      description: Retrieve details of a specific instance.
+      operationId: getInstance
+    - name: create-sync
+      description: Create a new sync session for an instance.
+      operationId: createSync
+    - name: upload-snapshot
+      description: Upload a page of snapshot data.
+      operationId: uploadSnapshotData
+    - name: upload-fact
+      description: Upload a page of fact data.
+      operationId: uploadFactData
+    - name: finish-sync
+      description: Finish the active sync session.
+      operationId: finishSync
+    - name: get-sync-status
+      description: Check sync status.
+      operationId: getSyncStatus
+    - name: list-webhooks
+      description: List configured webhooks.
+      operationId: listWebhooks

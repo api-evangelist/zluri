@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-structure.org/schema/v0",
+  "name": "Webhook",
+  "type": "object",
+  "description": "Zluri webhook configuration.",
+  "properties": {
+    "id": {"type": "string"},
+    "url": {"type": "string", "format": "uri"},
+    "events": {"type": "array", "items": {"type": "string"}},
+    "status": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "required": ["id", "url", "events", "status"]
+}

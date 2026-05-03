@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "id": "inst_01H8X7Y3K9PJZQVN6W2RC8MFAB",
+      "name": "Custom HR Tool",
+      "status": "active",
+      "notification_emails": ["it-ops@example.com"],
+      "created_at": "2026-04-01T10:30:00Z",
+      "updated_at": "2026-04-15T14:22:11Z"
+    }
+  ]
+}

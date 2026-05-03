@@ -1,0 +1,69 @@
+name: Zluri Vocabulary
+description: >-
+  Unified taxonomy mapping operational and capability concepts in the Zluri SaaS
+  management platform across OpenAPI operations and Naftiko capabilities.
+provider: zluri
+operational:
+  resources:
+    - name: Instance
+      description: A Zluri integration instance for an external system.
+    - name: Sync
+      description: A sync session within an instance for batched uploads.
+    - name: Snapshot
+      description: Current-state entity data uploaded into Zluri.
+    - name: Fact
+      description: Historical event data uploaded into Zluri.
+    - name: Webhook
+      description: A webhook subscription receiving Zluri event notifications.
+    - name: User
+      description: A user record synced into Zluri.
+    - name: Application
+      description: A SaaS application tracked in Zluri.
+    - name: Contract
+      description: A SaaS contract or subscription record.
+    - name: Transaction
+      description: A financial transaction associated with SaaS spend.
+    - name: Group
+      description: An access group or directory group.
+    - name: Role
+      description: A role within an application or directory.
+    - name: Activity
+      description: A user activity event (login, action) in a SaaS app.
+  actions:
+    - name: listInstances
+      description: List integration instances.
+    - name: getInstance
+      description: Retrieve an integration instance.
+    - name: updateInstance
+      description: Update an integration instance.
+    - name: createSync
+      description: Create a sync session.
+    - name: getSyncStatus
+      description: Get the status of a sync.
+    - name: finishSync
+      description: Finish an active sync.
+    - name: uploadSnapshotData
+      description: Upload a page of snapshot data.
+    - name: uploadFactData
+      description: Upload a page of fact data.
+    - name: listWebhooks
+      description: List webhooks.
+    - name: createWebhook
+      description: Create a webhook.
+    - name: getWebhook
+      description: Retrieve a webhook.
+    - name: updateWebhook
+      description: Update a webhook.
+    - name: deleteWebhook
+      description: Delete a webhook.
+capability:
+  workflows:
+    - name: saas-data-sync
+      description: Push entity and activity data from custom systems into Zluri.
+  personas:
+    - name: IT Operations Engineer
+      description: Operates the SaaS data pipeline into Zluri.
+    - name: SaaS Operations Manager
+      description: Owns SaaS visibility, governance, and cost control.
+    - name: Security Engineer
+      description: Uses Zluri for access governance, reviews, and compliance.

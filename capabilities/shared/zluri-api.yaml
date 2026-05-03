@@ -1,0 +1,68 @@
+apiVersion: naftiko/v1
+kind: SharedCapability
+metadata:
+  name: zluri-api
+  provider: zluri
+  api: zluri-api
+info:
+  title: Zluri API Shared Operations
+  description: >-
+    Shared per-API capability definition for the Zluri external API. Exposes
+    operations for managing integration instances, sync sessions, snapshot/fact
+    data uploads, and webhook configuration.
+consumes:
+  api: zluri-api
+  openapi: openapi/zluri-api-openapi.yml
+  operations:
+    - operationId: listInstances
+      summary: Zluri List Instances
+      method: GET
+      path: /integrations-sync/instances
+    - operationId: getInstance
+      summary: Zluri Get Instance
+      method: GET
+      path: /integrations-sync/instances/{instance_id}
+    - operationId: updateInstance
+      summary: Zluri Update Instance
+      method: PATCH
+      path: /integrations-sync/instances/{instance_id}
+    - operationId: createSync
+      summary: Zluri Create Sync
+      method: POST
+      path: /integrations-sync/instances/{instance_id}/syncs
+    - operationId: getSyncStatus
+      summary: Zluri Get Sync Status
+      method: GET
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}
+    - operationId: finishSync
+      summary: Zluri Finish Sync
+      method: POST
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/finish
+    - operationId: uploadSnapshotData
+      summary: Zluri Upload Snapshot Data
+      method: POST
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/snapshots
+    - operationId: uploadFactData
+      summary: Zluri Upload Fact Data
+      method: POST
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/facts
+    - operationId: listWebhooks
+      summary: Zluri List Webhooks
+      method: GET
+      path: /webhooks
+    - operationId: createWebhook
+      summary: Zluri Create Webhook
+      method: POST
+      path: /webhooks
+    - operationId: getWebhook
+      summary: Zluri Get Webhook
+      method: GET
+      path: /webhooks/{webhook_id}
+    - operationId: updateWebhook
+      summary: Zluri Update Webhook
+      method: PATCH
+      path: /webhooks/{webhook_id}
+    - operationId: deleteWebhook
+      summary: Zluri Delete Webhook
+      method: DELETE
+      path: /webhooks/{webhook_id}

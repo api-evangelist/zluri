@@ -1,0 +1,5 @@
+{
+  "url": "https://hooks.example.com/zluri",
+  "events": ["user.status.changed", "application.added"],
+  "status": "active"
+}

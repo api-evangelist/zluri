@@ -1,0 +1,20 @@
+{
+  "entity": "users",
+  "page": 1,
+  "data": [
+    {
+      "external_id": "u-1001",
+      "email": "alice@example.com",
+      "name": "Alice Smith",
+      "status": "active",
+      "department": "Engineering"
+    },
+    {
+      "external_id": "u-1002",
+      "email": "bob@example.com",
+      "name": "Bob Jones",
+      "status": "active",
+      "department": "Marketing"
+    }
+  ]
+}

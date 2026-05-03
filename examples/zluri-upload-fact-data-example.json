@@ -1,0 +1,12 @@
+{
+  "entity": "activities",
+  "page": 1,
+  "data": [
+    {
+      "user_external_id": "u-1001",
+      "application_external_id": "app-101",
+      "activity_type": "login",
+      "timestamp": "2026-05-03T07:42:11Z"
+    }
+  ]
+}
