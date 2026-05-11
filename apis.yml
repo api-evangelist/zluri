@@ -143,6 +143,11 @@ common:
       - name: Access Reviews
     name: Use Cases
     type: UseCases
+  - type: Integrations
+    url: https://www.zluri.com/integrations
+integrations:
+  - name: Register a Deal
+  - name: Partner Portal
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
