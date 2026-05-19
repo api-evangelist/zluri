@@ -1,0 +1,134 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zluri API — Syncs
+  description: 'Zluri API — Syncs. 3 operations. Lead operation: Zluri Create Sync. Self-contained Naftiko capability covering
+    one Zluri business surface.'
+  tags:
+  - Zluri
+  - Syncs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZLURI_API_KEY: ZLURI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zluri-syncs
+    baseUri: https://api-ext.zluri.com/v2
+    description: Zluri API — Syncs business capability. Self-contained, no shared references.
+    resources:
+    - name: integrations-sync-instances-instance_id-syncs
+      path: /integrations-sync/instances/{instance_id}/syncs
+      operations:
+      - name: createsync
+        method: POST
+        description: Zluri Create Sync
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: integrations-sync-instances-instance_id-syncs-sync_id
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}
+      operations:
+      - name: getsyncstatus
+        method: GET
+        description: Zluri Get Sync Status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: integrations-sync-instances-instance_id-syncs-sync_id-finish
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/finish
+      operations:
+      - name: finishsync
+        method: POST
+        description: Zluri Finish Sync
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.ZLURI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: zluri-syncs-rest
+    port: 8080
+    description: REST adapter for Zluri API — Syncs. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/integrations-sync/instances/{instance-id}/syncs
+      name: integrations-sync-instances-instance-id-syncs
+      description: REST surface for integrations-sync-instances-instance_id-syncs.
+      operations:
+      - method: POST
+        name: createsync
+        description: Zluri Create Sync
+        call: zluri-syncs.createsync
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/integrations-sync/instances/{instance-id}/syncs/{sync-id}
+      name: integrations-sync-instances-instance-id-syncs-sync-id
+      description: REST surface for integrations-sync-instances-instance_id-syncs-sync_id.
+      operations:
+      - method: GET
+        name: getsyncstatus
+        description: Zluri Get Sync Status
+        call: zluri-syncs.getsyncstatus
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/integrations-sync/instances/{instance-id}/syncs/{sync-id}/finish
+      name: integrations-sync-instances-instance-id-syncs-sync-id-finish
+      description: REST surface for integrations-sync-instances-instance_id-syncs-sync_id-finish.
+      operations:
+      - method: POST
+        name: finishsync
+        description: Zluri Finish Sync
+        call: zluri-syncs.finishsync
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zluri-syncs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zluri API — Syncs. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: zluri-create-sync
+      description: Zluri Create Sync
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zluri-syncs.createsync
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: zluri-get-sync-status
+      description: Zluri Get Sync Status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zluri-syncs.getsyncstatus
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: zluri-finish-sync
+      description: Zluri Finish Sync
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zluri-syncs.finishsync
+      outputParameters:
+      - type: object
+        mapping: $.

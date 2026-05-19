@@ -1,0 +1,137 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zluri API — Instances
+  description: 'Zluri API — Instances. 3 operations. Lead operation: Zluri List Instances. Self-contained Naftiko capability
+    covering one Zluri business surface.'
+  tags:
+  - Zluri
+  - Instances
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZLURI_API_KEY: ZLURI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zluri-instances
+    baseUri: https://api-ext.zluri.com/v2
+    description: Zluri API — Instances business capability. Self-contained, no shared references.
+    resources:
+    - name: integrations-sync-instances
+      path: /integrations-sync/instances
+      operations:
+      - name: listinstances
+        method: GET
+        description: Zluri List Instances
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: integrations-sync-instances-instance_id
+      path: /integrations-sync/instances/{instance_id}
+      operations:
+      - name: getinstance
+        method: GET
+        description: Zluri Get Instance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateinstance
+        method: PUT
+        description: Zluri Update Instance
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.ZLURI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: zluri-instances-rest
+    port: 8080
+    description: REST adapter for Zluri API — Instances. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/integrations-sync/instances
+      name: integrations-sync-instances
+      description: REST surface for integrations-sync-instances.
+      operations:
+      - method: GET
+        name: listinstances
+        description: Zluri List Instances
+        call: zluri-instances.listinstances
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/integrations-sync/instances/{instance-id}
+      name: integrations-sync-instances-instance-id
+      description: REST surface for integrations-sync-instances-instance_id.
+      operations:
+      - method: GET
+        name: getinstance
+        description: Zluri Get Instance
+        call: zluri-instances.getinstance
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updateinstance
+        description: Zluri Update Instance
+        call: zluri-instances.updateinstance
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zluri-instances-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zluri API — Instances. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: zluri-list-instances
+      description: Zluri List Instances
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zluri-instances.listinstances
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: zluri-get-instance
+      description: Zluri Get Instance
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: zluri-instances.getinstance
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: zluri-update-instance
+      description: Zluri Update Instance
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: zluri-instances.updateinstance
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

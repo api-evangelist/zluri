@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Zluri API — Data Upload
+  description: 'Zluri API — Data Upload. 2 operations. Lead operation: Zluri Upload Fact Data. Self-contained Naftiko capability
+    covering one Zluri business surface.'
+  tags:
+  - Zluri
+  - Data Upload
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    ZLURI_API_KEY: ZLURI_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: zluri-data-upload
+    baseUri: https://api-ext.zluri.com/v2
+    description: Zluri API — Data Upload business capability. Self-contained, no shared references.
+    resources:
+    - name: integrations-sync-instances-instance_id-syncs-sync_id-data-facts
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/facts
+      operations:
+      - name: uploadfactdata
+        method: POST
+        description: Zluri Upload Fact Data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: integrations-sync-instances-instance_id-syncs-sync_id-data-snapshots
+      path: /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/snapshots
+      operations:
+      - name: uploadsnapshotdata
+        method: POST
+        description: Zluri Upload Snapshot Data
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.ZLURI_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: zluri-data-upload-rest
+    port: 8080
+    description: REST adapter for Zluri API — Data Upload. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/integrations-sync/instances/{instance-id}/syncs/{sync-id}/data/facts
+      name: integrations-sync-instances-instance-id-syncs-sync-id-data-facts
+      description: REST surface for integrations-sync-instances-instance_id-syncs-sync_id-data-facts.
+      operations:
+      - method: POST
+        name: uploadfactdata
+        description: Zluri Upload Fact Data
+        call: zluri-data-upload.uploadfactdata
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/integrations-sync/instances/{instance-id}/syncs/{sync-id}/data/snapshots
+      name: integrations-sync-instances-instance-id-syncs-sync-id-data-snapshots
+      description: REST surface for integrations-sync-instances-instance_id-syncs-sync_id-data-snapshots.
+      operations:
+      - method: POST
+        name: uploadsnapshotdata
+        description: Zluri Upload Snapshot Data
+        call: zluri-data-upload.uploadsnapshotdata
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: zluri-data-upload-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Zluri API — Data Upload. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: zluri-upload-fact-data
+      description: Zluri Upload Fact Data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zluri-data-upload.uploadfactdata
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: zluri-upload-snapshot-data
+      description: Zluri Upload Snapshot Data
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: zluri-data-upload.uploadsnapshotdata
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
