@@ -148,6 +148,8 @@ common:
     type: UseCases
   - type: Integrations
     url: https://www.zluri.com/integrations
+  - type: LLMsTxt
+    url: https://developers.zluri.com/llms.txt
 integrations:
   - name: Register a Deal
   - name: Partner Portal
