@@ -62,15 +62,15 @@ apis:
         url: json-structure/webhook-structure.json
       - type: JSONStructure
         url: json-structure/error-structure.json
-      - type: Example
+      - type: Examples
         url: examples/zluri-list-instances-example.json
-      - type: Example
+      - type: Examples
         url: examples/zluri-create-sync-example.json
-      - type: Example
+      - type: Examples
         url: examples/zluri-upload-snapshot-data-example.json
-      - type: Example
+      - type: Examples
         url: examples/zluri-upload-fact-data-example.json
-      - type: Example
+      - type: Examples
         url: examples/zluri-create-webhook-example.json
 common:
   - type: GitHubOrganization
@@ -142,7 +142,7 @@ common:
     type: UseCases
   - type: Integrations
     url: https://www.zluri.com/integrations
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://developers.zluri.com/llms.txt
 integrations:
   - name: Register a Deal
