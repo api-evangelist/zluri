@@ -1,0 +1,215 @@
+openapi: 3.1.0
+info:
+  title: Zluri Data Upload API
+  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.
+  version: 2.0.0
+  contact:
+    name: Zluri Support
+    url: https://support.zluri.com
+  license:
+    name: Proprietary
+    url: https://www.zluri.com/policy/terms-and-conditions
+  termsOfService: https://www.zluri.com/policy/terms-and-conditions
+servers:
+- url: https://api-ext.zluri.com/v2
+  description: Zluri External API
+security:
+- bearerAuth: []
+tags:
+- name: Data Upload
+  description: Upload snapshot and fact data within a sync session. Snapshot data represents current state, while fact data represents historical events. Data must be uploaded in paginated batches of up to 1000 records per page.
+paths:
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/snapshots:
+    post:
+      operationId: uploadSnapshotData
+      summary: Zluri Upload Snapshot Data
+      description: 'Upload snapshot entity data within an active sync session. Snapshot data represents the current state of entities. Zluri compares new snapshots with the previous state to identify changes such as new users, deactivated users, and role changes. Data must be sent in paginated batches of up to 1000 records per page. Re-uploading a page with the same page number during an active sync will overwrite the previous data for that page. Supported entities include users, applications, contracts, and transactions. Follow the dependency order: users, then groups, then group_users, then activities.'
+      tags:
+      - Data Upload
+      parameters:
+      - $ref: '#/components/parameters/InstanceId'
+      - $ref: '#/components/parameters/SyncId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapshotDataUpload'
+      responses:
+        '200':
+          description: The snapshot data was successfully uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data uploaded successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Schema validation failed. Check that the entity fields match snapshot requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/data/facts:
+    post:
+      operationId: uploadFactData
+      summary: Zluri Upload Fact Data
+      description: Upload fact entity data within an active sync session. Fact data represents historical events that Zluri appends to the timeline for analytics and compliance tracking. Data must be sent in paginated batches of up to 1000 records per page. Fact and snapshot entities have different required fields and structures; using the wrong endpoint will fail schema validation.
+      tags:
+      - Data Upload
+      parameters:
+      - $ref: '#/components/parameters/InstanceId'
+      - $ref: '#/components/parameters/SyncId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FactDataUpload'
+      responses:
+        '200':
+          description: The fact data was successfully uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data uploaded successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Schema validation failed. Check that the entity fields match fact requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    FactDataUpload:
+      type: object
+      required:
+      - entity
+      - page
+      - data
+      properties:
+        entity:
+          type: string
+          description: The type of fact entity being uploaded. Fact data represents events appended to the historical timeline for analytics and compliance.
+          enum:
+          - activities
+          - transactions
+        page:
+          type: integer
+          description: Page number for this batch of data.
+          minimum: 1
+        data:
+          type: array
+          description: Array of fact records. Maximum 1000 records per page.
+          maxItems: 1000
+          items:
+            type: object
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+    SnapshotDataUpload:
+      type: object
+      required:
+      - entity
+      - page
+      - data
+      properties:
+        entity:
+          type: string
+          description: The type of entity being uploaded. Supported snapshot entities include users, applications, contracts, transactions, groups, group_users, roles, and activities. Note that groups, roles, and activities have a dependency on users being synced first.
+          enum:
+          - users
+          - applications
+          - contracts
+          - transactions
+          - groups
+          - group_users
+          - roles
+          - activities
+        page:
+          type: integer
+          description: Page number for this batch of data. Re-uploading a page with the same number will overwrite the previous data for that page.
+          minimum: 1
+        data:
+          type: array
+          description: Array of entity records. Maximum 1000 records per page. If you have more data, split it into multiple pages.
+          maxItems: 1000
+          items:
+            type: object
+  parameters:
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token authentication. Obtain your API token from the Zluri admin dashboard.
+externalDocs:
+  description: Zluri API Documentation
+  url: https://api-docs.zluri.dev/

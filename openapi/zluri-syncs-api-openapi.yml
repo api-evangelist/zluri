@@ -1,0 +1,192 @@
+openapi: 3.1.0
+info:
+  title: Zluri Data Upload Syncs API
+  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.
+  version: 2.0.0
+  contact:
+    name: Zluri Support
+    url: https://support.zluri.com
+  license:
+    name: Proprietary
+    url: https://www.zluri.com/policy/terms-and-conditions
+  termsOfService: https://www.zluri.com/policy/terms-and-conditions
+servers:
+- url: https://api-ext.zluri.com/v2
+  description: Zluri External API
+security:
+- bearerAuth: []
+tags:
+- name: Syncs
+  description: Create and manage sync sessions for uploading data to Zluri. A sync must be created before uploading data, and finished after all data is uploaded.
+paths:
+  /integrations-sync/instances/{instance_id}/syncs:
+    post:
+      operationId: createSync
+      summary: Zluri Create Sync
+      description: Create a new sync session for the specified instance. Only one sync can be active per instance at a time. Unfinished syncs block new syncs for the same instance. Data uploaded during a sync will not appear in Zluri until the sync is finished.
+      tags:
+      - Syncs
+      parameters:
+      - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '201':
+          description: The newly created sync session.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: A sync is already in progress for this instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}:
+    get:
+      operationId: getSyncStatus
+      summary: Zluri Get Sync Status
+      description: Retrieve the current status of a sync session. Use this to check if a sync is running, failed, or finished.
+      tags:
+      - Syncs
+      parameters:
+      - $ref: '#/components/parameters/InstanceId'
+      - $ref: '#/components/parameters/SyncId'
+      responses:
+        '200':
+          description: The sync session details and status.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /integrations-sync/instances/{instance_id}/syncs/{sync_id}/finish:
+    post:
+      operationId: finishSync
+      summary: Zluri Finish Sync
+      description: Mark a sync session as finished. Data will not appear in Zluri until the sync is finished. Always finish your sync after uploading all data. Once finished, a new sync can be created for the same instance.
+      tags:
+      - Syncs
+      parameters:
+      - $ref: '#/components/parameters/InstanceId'
+      - $ref: '#/components/parameters/SyncId'
+      responses:
+        '200':
+          description: The sync has been successfully finished.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Sync'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  parameters:
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+    Sync:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the sync session.
+        instance_id:
+          type: string
+          description: The instance this sync belongs to.
+        status:
+          type: string
+          description: Current status of the sync.
+          enum:
+          - running
+          - finished
+          - failed
+        created_at:
+          type: string
+          format: date-time
+          description: When the sync was created.
+        finished_at:
+          type: string
+          format: date-time
+          description: When the sync was finished.
+  responses:
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token authentication. Obtain your API token from the Zluri admin dashboard.
+externalDocs:
+  description: Zluri API Documentation
+  url: https://api-docs.zluri.dev/

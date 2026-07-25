@@ -1,0 +1,261 @@
+openapi: 3.1.0
+info:
+  title: Zluri Data Upload Webhooks API
+  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.
+  version: 2.0.0
+  contact:
+    name: Zluri Support
+    url: https://support.zluri.com
+  license:
+    name: Proprietary
+    url: https://www.zluri.com/policy/terms-and-conditions
+  termsOfService: https://www.zluri.com/policy/terms-and-conditions
+servers:
+- url: https://api-ext.zluri.com/v2
+  description: Zluri External API
+security:
+- bearerAuth: []
+tags:
+- name: Webhooks
+  description: Manage webhooks for receiving real-time notifications from Zluri.
+paths:
+  /webhooks:
+    get:
+      operationId: listWebhooks
+      summary: Zluri List Webhooks
+      description: Retrieve all configured webhooks for your Zluri account.
+      tags:
+      - Webhooks
+      responses:
+        '200':
+          description: A list of webhooks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    post:
+      operationId: createWebhook
+      summary: Zluri Create Webhook
+      description: Create a new webhook to receive real-time notifications for events such as user status updates from IDP and HRMS tools.
+      tags:
+      - Webhooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreate'
+      responses:
+        '201':
+          description: The newly created webhook.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /webhooks/{webhook_id}:
+    get:
+      operationId: getWebhook
+      summary: Zluri Get Webhook
+      description: Retrieve details of a specific webhook.
+      tags:
+      - Webhooks
+      parameters:
+      - $ref: '#/components/parameters/WebhookId'
+      responses:
+        '200':
+          description: The webhook details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    put:
+      operationId: updateWebhook
+      summary: Zluri Update Webhook
+      description: Update an existing webhook configuration.
+      tags:
+      - Webhooks
+      parameters:
+      - $ref: '#/components/parameters/WebhookId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdate'
+      responses:
+        '200':
+          description: The updated webhook.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Webhook'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    delete:
+      operationId: deleteWebhook
+      summary: Zluri Delete Webhook
+      description: Delete a webhook.
+      tags:
+      - Webhooks
+      parameters:
+      - $ref: '#/components/parameters/WebhookId'
+      responses:
+        '204':
+          description: The webhook was successfully deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  schemas:
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the webhook.
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types this webhook subscribes to.
+        status:
+          type: string
+          description: Current status of the webhook.
+          enum:
+          - active
+          - inactive
+        created_at:
+          type: string
+          format: date-time
+          description: When the webhook was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the webhook was last updated.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+    WebhookCreate:
+      type: object
+      required:
+      - url
+      - events
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types to subscribe to.
+    WebhookUpdate:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Updated URL for webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: Updated list of event types to subscribe to.
+        status:
+          type: string
+          description: Updated status of the webhook.
+          enum:
+          - active
+          - inactive
+  responses:
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    WebhookId:
+      name: webhook_id
+      in: path
+      required: true
+      description: The unique identifier of the webhook.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token authentication. Obtain your API token from the Zluri admin dashboard.
+externalDocs:
+  description: Zluri API Documentation
+  url: https://api-docs.zluri.dev/
