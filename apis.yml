@@ -6,7 +6,20 @@ description: >-
   SaaS usage, users, licenses, and spend. IT, finance, and procurement teams use Zluri to surface shadow IT, eliminate
   redundant or underused tools, rightsize licenses, and manage renewals and vendor relationships.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zluri.png
 tags:
   - Access Management
   - SaaS Management
@@ -17,62 +30,210 @@ specificationVersion: '0.19'
 access: 3rd-Party
 position: Consumer
 apis:
-  - aid: zluri:zluri
-    name: Zluri
-    humanURL: https://www.zluri.com/
-    tags:
-      - Access Management
-      - FinOps
-      - SaaS Management
-    description: >-
-      The Zluri external API enables organizations to push data from custom and on-premise applications into Zluri when
-      no native connector is available. The API supports syncing users, applications, contracts, transactions, groups,
-      roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated
-      batches, and finish the sync to make data visible in Zluri.
-    properties:
-      - type: Documentation
-        url: https://www.zluri.com/
-      - type: Documentation
-        url: https://api-docs.zluri.dev/
-      - type: Portal
-        url: https://developers.zluri.com/
-      - type: OpenAPI
-        url: openapi/zluri-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/instance.json
-      - type: JSONSchema
-        url: json-schema/sync.json
-      - type: JSONSchema
-        url: json-schema/snapshot-data-upload.json
-      - type: JSONSchema
-        url: json-schema/fact-data-upload.json
-      - type: JSONSchema
-        url: json-schema/webhook.json
-      - type: JSONSchema
-        url: json-schema/error.json
-      - type: JSONStructure
-        url: json-structure/instance-structure.json
-      - type: JSONStructure
-        url: json-structure/sync-structure.json
-      - type: JSONStructure
-        url: json-structure/snapshot-data-upload-structure.json
-      - type: JSONStructure
-        url: json-structure/fact-data-upload-structure.json
-      - type: JSONStructure
-        url: json-structure/webhook-structure.json
-      - type: JSONStructure
-        url: json-structure/error-structure.json
-      - type: Examples
-        url: examples/zluri-list-instances-example.json
-      - type: Examples
-        url: examples/zluri-create-sync-example.json
-      - type: Examples
-        url: examples/zluri-upload-snapshot-data-example.json
-      - type: Examples
-        url: examples/zluri-upload-fact-data-example.json
-      - type: Examples
-        url: examples/zluri-create-webhook-example.json
+- aid: zluri:zluri-data-upload-api
+  name: Zluri Data Upload API
+  description: >-
+    Upload snapshot and fact data within a sync session. Snapshot data represents current state, while
+    fact data represents historical events. Data must be uploaded in paginated batches of up to 1000 records
+    per page.
+  humanURL: https://www.zluri.com/
+  tags:
+  - Data Upload
+  properties:
+  - type: OpenAPI
+    url: openapi/zluri-data-upload-api-openapi.yml
+  - type: Documentation
+    url: https://www.zluri.com/
+  - type: Documentation
+    url: https://api-docs.zluri.dev/
+  - type: Portal
+    url: https://developers.zluri.com/
+  - type: JSONSchema
+    url: json-schema/instance.json
+  - type: JSONSchema
+    url: json-schema/sync.json
+  - type: JSONSchema
+    url: json-schema/snapshot-data-upload.json
+  - type: JSONSchema
+    url: json-schema/fact-data-upload.json
+  - type: JSONSchema
+    url: json-schema/webhook.json
+  - type: JSONSchema
+    url: json-schema/error.json
+  - type: JSONStructure
+    url: json-structure/instance-structure.json
+  - type: JSONStructure
+    url: json-structure/sync-structure.json
+  - type: JSONStructure
+    url: json-structure/snapshot-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/fact-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/webhook-structure.json
+  - type: JSONStructure
+    url: json-structure/error-structure.json
+  - type: Examples
+    url: examples/zluri-list-instances-example.json
+  - type: Examples
+    url: examples/zluri-create-sync-example.json
+  - type: Examples
+    url: examples/zluri-upload-snapshot-data-example.json
+  - type: Examples
+    url: examples/zluri-upload-fact-data-example.json
+  - type: Examples
+    url: examples/zluri-create-webhook-example.json
+- aid: zluri:zluri-instances-api
+  name: Zluri Instances API
+  description: Manage integration instances for syncing data with Zluri.
+  humanURL: https://www.zluri.com/
+  tags:
+  - Instances
+  properties:
+  - type: OpenAPI
+    url: openapi/zluri-instances-api-openapi.yml
+  - type: Documentation
+    url: https://www.zluri.com/
+  - type: Documentation
+    url: https://api-docs.zluri.dev/
+  - type: Portal
+    url: https://developers.zluri.com/
+  - type: JSONSchema
+    url: json-schema/instance.json
+  - type: JSONSchema
+    url: json-schema/sync.json
+  - type: JSONSchema
+    url: json-schema/snapshot-data-upload.json
+  - type: JSONSchema
+    url: json-schema/fact-data-upload.json
+  - type: JSONSchema
+    url: json-schema/webhook.json
+  - type: JSONSchema
+    url: json-schema/error.json
+  - type: JSONStructure
+    url: json-structure/instance-structure.json
+  - type: JSONStructure
+    url: json-structure/sync-structure.json
+  - type: JSONStructure
+    url: json-structure/snapshot-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/fact-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/webhook-structure.json
+  - type: JSONStructure
+    url: json-structure/error-structure.json
+  - type: Examples
+    url: examples/zluri-list-instances-example.json
+  - type: Examples
+    url: examples/zluri-create-sync-example.json
+  - type: Examples
+    url: examples/zluri-upload-snapshot-data-example.json
+  - type: Examples
+    url: examples/zluri-upload-fact-data-example.json
+  - type: Examples
+    url: examples/zluri-create-webhook-example.json
+- aid: zluri:zluri-syncs-api
+  name: Zluri Syncs API
+  description: >-
+    Create and manage sync sessions for uploading data to Zluri. A sync must be created before uploading
+    data, and finished after all data is uploaded.
+  humanURL: https://www.zluri.com/
+  tags:
+  - Syncs
+  properties:
+  - type: OpenAPI
+    url: openapi/zluri-syncs-api-openapi.yml
+  - type: Documentation
+    url: https://www.zluri.com/
+  - type: Documentation
+    url: https://api-docs.zluri.dev/
+  - type: Portal
+    url: https://developers.zluri.com/
+  - type: JSONSchema
+    url: json-schema/instance.json
+  - type: JSONSchema
+    url: json-schema/sync.json
+  - type: JSONSchema
+    url: json-schema/snapshot-data-upload.json
+  - type: JSONSchema
+    url: json-schema/fact-data-upload.json
+  - type: JSONSchema
+    url: json-schema/webhook.json
+  - type: JSONSchema
+    url: json-schema/error.json
+  - type: JSONStructure
+    url: json-structure/instance-structure.json
+  - type: JSONStructure
+    url: json-structure/sync-structure.json
+  - type: JSONStructure
+    url: json-structure/snapshot-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/fact-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/webhook-structure.json
+  - type: JSONStructure
+    url: json-structure/error-structure.json
+  - type: Examples
+    url: examples/zluri-list-instances-example.json
+  - type: Examples
+    url: examples/zluri-create-sync-example.json
+  - type: Examples
+    url: examples/zluri-upload-snapshot-data-example.json
+  - type: Examples
+    url: examples/zluri-upload-fact-data-example.json
+  - type: Examples
+    url: examples/zluri-create-webhook-example.json
+- aid: zluri:zluri-webhooks-api
+  name: Zluri Webhooks API
+  description: Manage webhooks for receiving real-time notifications from Zluri.
+  humanURL: https://www.zluri.com/
+  tags:
+  - Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/zluri-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://www.zluri.com/
+  - type: Documentation
+    url: https://api-docs.zluri.dev/
+  - type: Portal
+    url: https://developers.zluri.com/
+  - type: JSONSchema
+    url: json-schema/instance.json
+  - type: JSONSchema
+    url: json-schema/sync.json
+  - type: JSONSchema
+    url: json-schema/snapshot-data-upload.json
+  - type: JSONSchema
+    url: json-schema/fact-data-upload.json
+  - type: JSONSchema
+    url: json-schema/webhook.json
+  - type: JSONSchema
+    url: json-schema/error.json
+  - type: JSONStructure
+    url: json-structure/instance-structure.json
+  - type: JSONStructure
+    url: json-structure/sync-structure.json
+  - type: JSONStructure
+    url: json-structure/snapshot-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/fact-data-upload-structure.json
+  - type: JSONStructure
+    url: json-structure/webhook-structure.json
+  - type: JSONStructure
+    url: json-structure/error-structure.json
+  - type: Examples
+    url: examples/zluri-list-instances-example.json
+  - type: Examples
+    url: examples/zluri-create-sync-example.json
+  - type: Examples
+    url: examples/zluri-upload-snapshot-data-example.json
+  - type: Examples
+    url: examples/zluri-upload-fact-data-example.json
+  - type: Examples
+    url: examples/zluri-create-webhook-example.json
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/zluri/overview
   - type: AgenticAccess
     url: agentic-access/zluri-agentic-access.yml
   - type: TrustCenter
