@@ -1,0 +1,20 @@
+{
+  "provider": "zluri",
+  "sources": [
+    "zluri-data-upload-api-openapi.yml",
+    "zluri-instances-api-openapi.yml",
+    "zluri-syncs-api-openapi.yml",
+    "zluri-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "zluri-data-upload-api-openapi.yml",
+    "zluri-instances-api-openapi.yml",
+    "zluri-syncs-api-openapi.yml",
+    "zluri-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

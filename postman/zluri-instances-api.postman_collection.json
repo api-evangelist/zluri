@@ -1,0 +1,825 @@
+{
+  "info": {
+    "_postman_id": "f465c1e1-ed26-42e9-aa00-46ce9744a505",
+    "name": "Zluri Data Upload Instances API",
+    "description": "The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.\n\nContact Support:\n Name: Zluri Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:38:29.000Z",
+    "updatedAt": "2026-07-28T03:38:29.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f465c1e1-ed26-42e9-aa00-46ce9744a505"
+  },
+  "item": [
+    {
+      "name": "integrations-sync",
+      "item": [
+        {
+          "name": "instances",
+          "item": [
+            {
+              "name": "{instance_id}",
+              "item": [
+                {
+                  "name": "Zluri Get Instance",
+                  "id": "bc3a8abe-469d-4796-8321-a2e627931156",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "integrations-sync",
+                        "instances",
+                        ":instance_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "2c9d372e-511a-4027-82e3-ba03aa9e603f",
+                          "key": "instance_id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier of the integration instance."
+                        }
+                      ]
+                    },
+                    "description": "Retrieve details of a specific integration instance."
+                  },
+                  "response": [
+                    {
+                      "id": "62157fdb-3ef2-4bd6-84ab-704a38c6c512",
+                      "name": "The integration instance details.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"status\": \"inactive\",\n    \"notification_emails\": [\n      \"<email>\",\n      \"<email>\"\n    ],\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-62157fdb-3ef2-4bd6-84ab-704a38c6c512"
+                    },
+                    {
+                      "id": "47cf342b-c8bf-482b-8268-a3642713b12e",
+                      "name": "Authentication failed. Check your bearer token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-47cf342b-c8bf-482b-8268-a3642713b12e"
+                    },
+                    {
+                      "id": "15d0dd2b-6183-4480-ab7a-22fd11210f66",
+                      "name": "The requested resource was not found.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-15d0dd2b-6183-4480-ab7a-22fd11210f66"
+                    },
+                    {
+                      "id": "1ef1c6ab-7c7b-4bf2-9fc9-8b4a8d0700c1",
+                      "name": "Rate limit exceeded. Retry after a short delay.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-1ef1c6ab-7c7b-4bf2-9fc9-8b4a8d0700c1"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:38:30.000Z",
+                  "updatedAt": "2026-07-28T03:38:30.000Z",
+                  "uid": "35240-bc3a8abe-469d-4796-8321-a2e627931156"
+                },
+                {
+                  "name": "Zluri Update Instance",
+                  "id": "c12c0fbc-4d17-4246-9e61-088e414ee098",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "integrations-sync",
+                        "instances",
+                        ":instance_id"
+                      ],
+                      "variable": [
+                        {
+                          "id": "8540ec2d-1633-42c0-83df-982e54450122",
+                          "key": "instance_id",
+                          "value": "<string>",
+                          "description": "(Required) The unique identifier of the integration instance."
+                        }
+                      ]
+                    },
+                    "description": "Update an existing integration instance configuration with new data in the request body. You can update notification emails and other instance settings."
+                  },
+                  "response": [
+                    {
+                      "id": "8cdcf1be-6736-4784-96b7-10f95242f661",
+                      "name": "The updated integration instance.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"status\": \"inactive\",\n    \"notification_emails\": [\n      \"<email>\",\n      \"<email>\"\n    ],\n    \"created_at\": \"<dateTime>\",\n    \"updated_at\": \"<dateTime>\"\n  }\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-8cdcf1be-6736-4784-96b7-10f95242f661"
+                    },
+                    {
+                      "id": "2682f3ac-713b-4c74-815f-ad2751d1d461",
+                      "name": "The request was malformed or missing required parameters.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-2682f3ac-713b-4c74-815f-ad2751d1d461"
+                    },
+                    {
+                      "id": "8707cb2c-48d7-4a3e-9782-7466b3365090",
+                      "name": "Authentication failed. Check your bearer token.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-8707cb2c-48d7-4a3e-9782-7466b3365090"
+                    },
+                    {
+                      "id": "da0618a7-58a1-45d7-a5c4-e780563a3ddd",
+                      "name": "The requested resource was not found.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-da0618a7-58a1-45d7-a5c4-e780563a3ddd"
+                    },
+                    {
+                      "id": "5f3d93e1-dc1b-47fd-a189-5fa24361b250",
+                      "name": "Rate limit exceeded. Retry after a short delay.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"notification_emails\": [\n    \"<email>\",\n    \"<email>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/integrations-sync/instances/:instance_id",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "integrations-sync",
+                            "instances",
+                            ":instance_id"
+                          ],
+                          "variable": [
+                            {
+                              "key": "instance_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                      "createdAt": "2026-07-28T03:38:30.000Z",
+                      "updatedAt": "2026-07-28T03:38:30.000Z",
+                      "uid": "35240-5f3d93e1-dc1b-47fd-a189-5fa24361b250"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:38:30.000Z",
+                  "updatedAt": "2026-07-28T03:38:30.000Z",
+                  "uid": "35240-c12c0fbc-4d17-4246-9e61-088e414ee098"
+                }
+              ],
+              "id": "5881b458-f8d4-485e-9571-daf5cbc7f68f",
+              "createdAt": "2026-07-28T03:38:30.000Z",
+              "updatedAt": "2026-07-28T03:38:30.000Z",
+              "uid": "35240-5881b458-f8d4-485e-9571-daf5cbc7f68f"
+            },
+            {
+              "name": "Zluri List Instances",
+              "id": "9ccf160d-141c-42a2-8aa8-189aa5452348",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/integrations-sync/instances",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "integrations-sync",
+                    "instances"
+                  ]
+                },
+                "description": "Retrieve a list of all integration instances configured in your Zluri account."
+              },
+              "response": [
+                {
+                  "id": "2e56b06d-6a15-4557-be0a-78ded3cf8125",
+                  "name": "A list of integration instances.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/integrations-sync/instances",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "integrations-sync",
+                        "instances"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"data\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"inactive\",\n      \"notification_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"status\": \"inactive\",\n      \"notification_emails\": [\n        \"<email>\",\n        \"<email>\"\n      ],\n      \"created_at\": \"<dateTime>\",\n      \"updated_at\": \"<dateTime>\"\n    }\n  ]\n}",
+                  "createdAt": "2026-07-28T03:38:30.000Z",
+                  "updatedAt": "2026-07-28T03:38:30.000Z",
+                  "uid": "35240-2e56b06d-6a15-4557-be0a-78ded3cf8125"
+                },
+                {
+                  "id": "5ec5f8f2-8f56-45ce-970f-b5f81c5f1552",
+                  "name": "Authentication failed. Check your bearer token.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/integrations-sync/instances",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "integrations-sync",
+                        "instances"
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T03:38:30.000Z",
+                  "updatedAt": "2026-07-28T03:38:30.000Z",
+                  "uid": "35240-5ec5f8f2-8f56-45ce-970f-b5f81c5f1552"
+                },
+                {
+                  "id": "accbfb46-d71f-48ea-a39c-a3b91a1f4298",
+                  "name": "Rate limit exceeded. Retry after a short delay.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/integrations-sync/instances",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "integrations-sync",
+                        "instances"
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"code\": \"<string>\"\n}",
+                  "createdAt": "2026-07-28T03:38:30.000Z",
+                  "updatedAt": "2026-07-28T03:38:30.000Z",
+                  "uid": "35240-accbfb46-d71f-48ea-a39c-a3b91a1f4298"
+                }
+              ],
+              "createdAt": "2026-07-28T03:38:30.000Z",
+              "updatedAt": "2026-07-28T03:38:30.000Z",
+              "uid": "35240-9ccf160d-141c-42a2-8aa8-189aa5452348"
+            }
+          ],
+          "id": "2e638970-4d21-4878-8dba-4eb018dacece",
+          "createdAt": "2026-07-28T03:38:30.000Z",
+          "updatedAt": "2026-07-28T03:38:30.000Z",
+          "uid": "35240-2e638970-4d21-4878-8dba-4eb018dacece"
+        }
+      ],
+      "id": "4baf2033-3403-489c-8131-1a3be398951e",
+      "createdAt": "2026-07-28T03:38:30.000Z",
+      "updatedAt": "2026-07-28T03:38:30.000Z",
+      "uid": "35240-4baf2033-3403-489c-8131-1a3be398951e"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api-ext.zluri.com/v2"
+    }
+  ]
+}
