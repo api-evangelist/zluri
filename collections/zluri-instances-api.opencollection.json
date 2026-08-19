@@ -1,0 +1,77 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zluri Data Upload Instances API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Instances",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Zluri List Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext.zluri.com/v2/integrations-sync/instances"
+          },
+          "docs": "Retrieve a list of all integration instances configured in your Zluri account."
+        },
+        {
+          "info": {
+            "name": "Zluri Get Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api-ext.zluri.com/v2/integrations-sync/instances/:instance_id",
+            "params": [
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the integration instance."
+              }
+            ]
+          },
+          "docs": "Retrieve details of a specific integration instance."
+        },
+        {
+          "info": {
+            "name": "Zluri Update Instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api-ext.zluri.com/v2/integrations-sync/instances/:instance_id",
+            "params": [
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the integration instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing integration instance configuration with new data in the request body. You can update notification emails and other instance settings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

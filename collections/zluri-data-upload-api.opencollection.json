@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Zluri Data Upload API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Upload",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Zluri Upload Snapshot Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext.zluri.com/v2/integrations-sync/instances/:instance_id/syncs/:sync_id/data/snapshots",
+            "params": [
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the integration instance."
+              },
+              {
+                "name": "sync_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the sync session."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload snapshot entity data within an active sync session. Snapshot data represents the current state of entities. Zluri compares new snapshots with the previous state to identify changes such as new users, deactivated users, and role changes. Data must be sent in paginated batches of up to 1000 records per page. Re-uploading a page with the same page number during an active sync will overwrite the previous data for that page. Supported entities include users, applications, contracts, and transa"
+        },
+        {
+          "info": {
+            "name": "Zluri Upload Fact Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api-ext.zluri.com/v2/integrations-sync/instances/:instance_id/syncs/:sync_id/data/facts",
+            "params": [
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the integration instance."
+              },
+              {
+                "name": "sync_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the sync session."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload fact entity data within an active sync session. Fact data represents historical events that Zluri appends to the timeline for analytics and compliance tracking. Data must be sent in paginated batches of up to 1000 records per page. Fact and snapshot entities have different required fields and structures; using the wrong endpoint will fail schema validation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
