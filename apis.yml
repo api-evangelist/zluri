@@ -187,6 +187,8 @@ apis:
   description: Manage webhooks for receiving real-time notifications from Zluri.
   humanURL: https://www.zluri.com/
   tags:
+  - Webhook
+  tags_raw:
   - Webhooks
   properties:
   - type: OpenAPI
