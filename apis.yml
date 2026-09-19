@@ -151,6 +151,8 @@ apis:
     data, and finished after all data is uploaded.
   humanURL: https://www.zluri.com/
   tags:
+  - Sync
+  tags_raw:
   - Syncs
   properties:
   - type: OpenAPI
