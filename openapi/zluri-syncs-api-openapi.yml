@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Zluri Data Upload Syncs API
-  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.
+  title: Zluri Syncs API
+  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform.
   version: 2.0.0
   contact:
     name: Zluri Support
@@ -107,31 +107,7 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
-  parameters:
-    InstanceId:
-      name: instance_id
-      in: path
-      required: true
-      description: The unique identifier of the integration instance.
-      schema:
-        type: string
-    SyncId:
-      name: sync_id
-      in: path
-      required: true
-      description: The unique identifier of the sync session.
-      schema:
-        type: string
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
     Sync:
       type: object
       properties:
@@ -156,15 +132,18 @@ components:
           type: string
           format: date-time
           description: When the sync was finished.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
   responses:
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
@@ -175,12 +154,33 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
+    NotFound:
+      description: The requested resource was not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

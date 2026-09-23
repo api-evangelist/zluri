@@ -1,10 +1,7 @@
 {
   "provider": "zluri",
   "sources": [
-    "zluri-data-upload-api-openapi.yml",
-    "zluri-instances-api-openapi.yml",
-    "zluri-syncs-api-openapi.yml",
-    "zluri-webhooks-api-openapi.yml"
+    "_original/zluri-api-openapi.yml"
   ],
   "outputs": [
     "zluri-data-upload-api-openapi.yml",
@@ -15,6 +12,15 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "zluri-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "zluri-data-upload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zluri-instances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zluri-syncs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "zluri-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

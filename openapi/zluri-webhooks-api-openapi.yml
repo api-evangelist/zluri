@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Zluri Data Upload Webhooks API
-  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform. It enables organizations to push data from custom and on-premise applications to Zluri when no native connector is available. The API supports syncing users, applications, contracts, transactions, groups, roles, and activities. It follows a sync-based workflow where you create a sync session, upload data in paginated batches, and finish the sync to make data visible in Zluri. The API also supports webhook management for real-time notifications and instance configuration management.
+  title: Zluri Webhooks API
+  description: The Zluri API provides external endpoints for integrating with the Zluri SaaS management platform.
   version: 2.0.0
   contact:
     name: Zluri Support
@@ -145,36 +145,15 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  parameters:
+    WebhookId:
+      name: webhook_id
+      in: path
+      required: true
+      description: The unique identifier of the webhook.
+      schema:
+        type: string
   schemas:
-    Webhook:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the webhook.
-        url:
-          type: string
-          format: uri
-          description: The URL that will receive webhook notifications.
-        events:
-          type: array
-          items:
-            type: string
-          description: List of event types this webhook subscribes to.
-        status:
-          type: string
-          description: Current status of the webhook.
-          enum:
-          - active
-          - inactive
-        created_at:
-          type: string
-          format: date-time
-          description: When the webhook was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: When the webhook was last updated.
     Error:
       type: object
       properties:
@@ -217,9 +196,38 @@ components:
           enum:
           - active
           - inactive
+    Webhook:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the webhook.
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types this webhook subscribes to.
+        status:
+          type: string
+          description: Current status of the webhook.
+          enum:
+          - active
+          - inactive
+        created_at:
+          type: string
+          format: date-time
+          description: When the webhook was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When the webhook was last updated.
   responses:
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
@@ -236,20 +244,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    WebhookId:
-      name: webhook_id
-      in: path
-      required: true
-      description: The unique identifier of the webhook.
-      schema:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http
