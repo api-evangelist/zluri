@@ -102,7 +102,64 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    FactDataUpload:
+      type: object
+      required:
+      - entity
+      - page
+      - data
+      properties:
+        entity:
+          type: string
+          description: The type of fact entity being uploaded. Fact data represents events appended to the historical timeline for analytics and compliance.
+          enum:
+          - activities
+          - transactions
+        page:
+          type: integer
+          description: Page number for this batch of data.
+          minimum: 1
+        data:
+          type: array
+          description: Array of fact records. Maximum 1000 records per page.
+          maxItems: 1000
+          items:
+            type: object
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
     SnapshotDataUpload:
       type: object
       required:
@@ -132,63 +189,6 @@ components:
           maxItems: 1000
           items:
             type: object
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
-    FactDataUpload:
-      type: object
-      required:
-      - entity
-      - page
-      - data
-      properties:
-        entity:
-          type: string
-          description: The type of fact entity being uploaded. Fact data represents events appended to the historical timeline for analytics and compliance.
-          enum:
-          - activities
-          - transactions
-        page:
-          type: integer
-          description: Page number for this batch of data.
-          minimum: 1
-        data:
-          type: array
-          description: Array of fact records. Maximum 1000 records per page.
-          maxItems: 1000
-          items:
-            type: object
-  responses:
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or missing required parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     InstanceId:
       name: instance_id

@@ -107,7 +107,56 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
     Sync:
       type: object
       properties:
@@ -132,55 +181,6 @@ components:
           type: string
           format: date-time
           description: When the sync was finished.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
-  responses:
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or missing required parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    SyncId:
-      name: sync_id
-      in: path
-      required: true
-      description: The unique identifier of the sync session.
-      schema:
-        type: string
-    InstanceId:
-      name: instance_id
-      in: path
-      required: true
-      description: The unique identifier of the integration instance.
-      schema:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http
