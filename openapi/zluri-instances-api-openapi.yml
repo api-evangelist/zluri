@@ -107,8 +107,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
@@ -119,13 +119,34 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+    InstanceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Updated name for the instance.
+        notification_emails:
+          type: array
+          items:
+            type: string
+            format: email
+          description: Updated email addresses for sync notifications.
     Instance:
       type: object
       properties:
@@ -155,27 +176,6 @@ components:
           type: string
           format: date-time
           description: When the instance was last updated.
-    InstanceUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Updated name for the instance.
-        notification_emails:
-          type: array
-          items:
-            type: string
-            format: email
-          description: Updated email addresses for sync notifications.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
   parameters:
     InstanceId:
       name: instance_id

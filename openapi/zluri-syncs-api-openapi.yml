@@ -114,8 +114,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
@@ -126,27 +126,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    InstanceId:
-      name: instance_id
-      in: path
-      required: true
-      description: The unique identifier of the integration instance.
-      schema:
-        type: string
-    SyncId:
-      name: sync_id
-      in: path
-      required: true
-      description: The unique identifier of the sync session.
-      schema:
-        type: string
   schemas:
     Error:
       type: object
@@ -181,6 +166,21 @@ components:
           type: string
           format: date-time
           description: When the sync was finished.
+  parameters:
+    SyncId:
+      name: sync_id
+      in: path
+      required: true
+      description: The unique identifier of the sync session.
+      schema:
+        type: string
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      description: The unique identifier of the integration instance.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
