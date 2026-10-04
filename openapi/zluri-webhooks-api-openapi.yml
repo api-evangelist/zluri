@@ -145,32 +145,31 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed or missing required parameters.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Authentication failed. Check your bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
+    WebhookCreate:
+      type: object
+      required:
+      - url
+      - events
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL that will receive webhook notifications.
+        events:
+          type: array
+          items:
+            type: string
+          description: List of event types to subscribe to.
     Webhook:
       type: object
       properties:
@@ -218,30 +217,31 @@ components:
           enum:
           - active
           - inactive
-    WebhookCreate:
-      type: object
-      required:
-      - url
-      - events
-      properties:
-        url:
-          type: string
-          format: uri
-          description: The URL that will receive webhook notifications.
-        events:
-          type: array
-          items:
-            type: string
-          description: List of event types to subscribe to.
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed or missing required parameters.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     WebhookId:
       name: webhook_id
