@@ -146,30 +146,24 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   schemas:
-    Error:
+    WebhookUpdate:
       type: object
-      properties:
-        error:
-          type: string
-          description: Error message describing what went wrong.
-        code:
-          type: string
-          description: Machine-readable error code.
-    WebhookCreate:
-      type: object
-      required:
-      - url
-      - events
       properties:
         url:
           type: string
           format: uri
-          description: The URL that will receive webhook notifications.
+          description: Updated URL for webhook notifications.
         events:
           type: array
           items:
             type: string
-          description: List of event types to subscribe to.
+          description: Updated list of event types to subscribe to.
+        status:
+          type: string
+          description: Updated status of the webhook.
+          enum:
+          - active
+          - inactive
     Webhook:
       type: object
       properties:
@@ -199,33 +193,33 @@ components:
           type: string
           format: date-time
           description: When the webhook was last updated.
-    WebhookUpdate:
+    WebhookCreate:
       type: object
+      required:
+      - url
+      - events
       properties:
         url:
           type: string
           format: uri
-          description: Updated URL for webhook notifications.
+          description: The URL that will receive webhook notifications.
         events:
           type: array
           items:
             type: string
-          description: Updated list of event types to subscribe to.
-        status:
+          description: List of event types to subscribe to.
+    Error:
+      type: object
+      properties:
+        error:
           type: string
-          description: Updated status of the webhook.
-          enum:
-          - active
-          - inactive
+          description: Error message describing what went wrong.
+        code:
+          type: string
+          description: Machine-readable error code.
   responses:
     NotFound:
       description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
@@ -238,6 +232,12 @@ components:
             $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Authentication failed. Check your bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded. Retry after a short delay.
       content:
         application/json:
           schema:
