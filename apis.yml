@@ -34,6 +34,9 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/zluri.png
 tags:
+  - Identity and Access Management
+  - SaaS Management
+tags_raw:
   - Access Management
   - SaaS Management
 url: https://raw.githubusercontent.com/api-evangelist/zluri/refs/heads/main/apis.yml
