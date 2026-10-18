@@ -2,6 +2,7 @@ generated: '2026-10-14'
 method: searched
 checked:
 - okta/integrations/okta-integration-edges.yml
+- zoom/integrations/zoom-integration-edges.yml
 source:
 - okta/integrations/okta-integration-edges.yml
 edges:
@@ -26,3 +27,20 @@ edges:
   - OKTA_VERIFIED
   features:
   - SAML
+- partner_name: Zoom (own)
+  partner: zoom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.zoom.us/apps/WbfeVN1FRBmSkftW61QJMQ
+  mirror_of: zoom/integrations/zoom-integration-edges.yml
+  apps:
+  - Zluri
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Zoom app
